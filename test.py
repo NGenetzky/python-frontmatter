@@ -241,6 +241,16 @@ class HandlerTest(unittest.TestCase):
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
+        posttext = frontmatter.dumps(post, JoplinDbHandler())
+        post_2 = frontmatter.loads(posttext)
+
+        post_data = post.to_dict()
+        post_2_data = post_2.to_dict()
+        for k in post_data:
+            self.assertEqual(post_data[k], post_2_data[k])
+
+
+
 
 if __name__ == "__main__":
     doctest.testfile('README.md')
