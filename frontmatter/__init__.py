@@ -26,7 +26,7 @@ POST_TEMPLATE = """\
 # global handlers
 handlers = {
     Handler.FM_BOUNDARY: Handler() 
-    for Handler in [YAMLHandler, JSONHandler, TOMLHandler]
+    for Handler in [YAMLHandler, JSONHandler, TOMLHandler, JoplinDbHandler]
     if Handler is not None
 }
 
