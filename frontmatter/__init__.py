@@ -44,6 +44,9 @@ def detect_format(text, handlers):
     for pattern, handler in handlers.items():
         if pattern.match(text):
             return handler
+    for pattern, handler in handlers.items():
+        if handler.detect(text):
+            return handler
 
     # nothing matched, give nothing back
     return None
