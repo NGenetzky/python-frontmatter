@@ -12,6 +12,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+import datetime
 
 import six
 
@@ -216,26 +217,26 @@ class HandlerTest(unittest.TestCase):
 
         metadata = {
             "id": "6fb7c13db1dc4a6a8f85275c02944029",
-            # "parent_id": "f8fa8639975e42a8bb1c3caf06c4bff0",
-            # "created_time": "2018-09-17T03:11:33.719Z",
-            # "updated_time": "2018-09-17T03:14:12.394Z",
-            # "is_conflict": "0",
-            # "latitude:": "0.00000000",
-            # "longitude": "0.00000000",
-            # "altitude": "0.0000",
-            # "author": "",
-            # "source_url": "",
-            # "is_todo": "0",
-            # "todo_due": "0",
-            # "todo_completed": "0",
-            # "source": "joplin-desktop",
-            # "source_application": "net.cozic.joplin-desktop",
-            # "application_data": "",
-            # "order": "0",
-            # "user_created_time": "2018-09-17T03:11:33.719Z",
-            # "user_updated_time": "2018-09-17T03:14:12.394Z",
-            # "encryption_cipher_text": "",
-            # "encryption_applied": "0",
+            "parent_id": "f8fa8639975e42a8bb1c3caf06c4bff0",
+            "created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
+            "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
+            "is_conflict": 0,
+            "latitude": 0.00000000,
+            "longitude": 0.00000000,
+            "altitude": 0.0000,
+            "author": None,
+            "source_url": None,
+            "is_todo": 0,
+            "todo_due": 0,
+            "todo_completed": 0,
+            "source": "joplin-desktop",
+            "source_application": "net.cozic.joplin-desktop",
+            "application_data": None,
+            "order": 0,
+            "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
+            "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
+            "encryption_cipher_text": None,
+            "encryption_applied": 0,
             "type_": 1,
         }
         for k, v in metadata.items():
@@ -248,6 +249,7 @@ class HandlerTest(unittest.TestCase):
         for k in post.metadata:
             self.assertEqual(post.metadata[k], post_2.metadata[k])
 
+        # TODO: What is up with this failing?
         self.assertEqual(post.content, post_2.content)
 
 
