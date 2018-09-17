@@ -212,8 +212,7 @@ class HandlerTest(unittest.TestCase):
 
     def test_joplindb_note(self):
         "load custom joplindb frontmatter"
-        post = frontmatter.load('tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md',
-                handler=JoplinDbHandler())
+        post = frontmatter.load('tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md')
 
         metadata = {
             "id": "6fb7c13db1dc4a6a8f85275c02944029",
@@ -237,7 +236,7 @@ class HandlerTest(unittest.TestCase):
             # "user_updated_time": "2018-09-17T03:14:12.394Z",
             # "encryption_cipher_text": "",
             # "encryption_applied": "0",
-            "type_": "1",
+            "type_": 1,
         }
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
