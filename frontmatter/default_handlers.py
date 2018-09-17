@@ -132,7 +132,7 @@ except ImportError:
 from .util import u
 
 
-__all__ = ['BaseHandler', 'YAMLHandler', 'JSONHandler']
+__all__ = ['BaseHandler', 'YAMLHandler', 'JSONHandler', 'JoplinDbHandler']
 
 if toml:
     __all__.append('TOMLHandler')
@@ -260,3 +260,53 @@ if toml:
 
 else:
     TOMLHandler = None
+
+
+class JoplinDbHandler(object):
+    """
+    TODO
+    """
+
+    FM_BOUNDARY = None
+    START_DELIMITER = None
+    END_DELIMITER = None
+
+    def __init__(self, fm_boundary=None, start_delimiter=None, end_delimiter=None):
+        self.FM_BOUNDARY = fm_boundary or self.FM_BOUNDARY
+        self.START_DELIMITER = start_delimiter or self.START_DELIMITER
+        self.END_DELIMITER = end_delimiter or self.END_DELIMITER
+
+        if self.FM_BOUNDARY is None:
+            raise NotImplementedError('No frontmatter boundary defined. '
+                'Please set {}.FM_BOUNDARY to a regular expression'.format(self.__class__.__name__))
+
+    def detect(self, text):
+        """
+        Decide whether this handler can parse the given ``text``,
+        and return True or False.
+
+        Note that this is *not* called when passing a handler instance to 
+        :py:func:`frontmatter.load <frontmatter.load>` or :py:func:`loads <frontmatter.loads>`.
+        """
+        if self.FM_BOUNDARY.match(text):
+            return True
+        return False
+
+    def split(self, text):
+        """
+        Split text into frontmatter and content
+        """
+        _, fm, content = self.FM_BOUNDARY.split(text, 2)
+        return fm, content
+
+    def load(self, fm):
+        """
+        Parse frontmatter and return a dict
+        """
+        raise NotImplementedError
+
+    def export(self, metadata, **kwargs):
+        """
+        Turn metadata back into text
+        """
+        raise NotImplementedError

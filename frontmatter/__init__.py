@@ -10,7 +10,7 @@ import re
 import six
 
 from .util import u
-from .default_handlers import YAMLHandler, JSONHandler, TOMLHandler
+from .default_handlers import YAMLHandler, JSONHandler, TOMLHandler, JoplinDbHandler
 
 
 __all__ = ['parse', 'load', 'loads', 'dump', 'dumps']

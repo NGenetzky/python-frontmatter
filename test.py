@@ -16,7 +16,7 @@ import unittest
 import six
 
 import frontmatter
-from frontmatter.default_handlers import YAMLHandler, JSONHandler, TOMLHandler 
+from frontmatter.default_handlers import YAMLHandler, JSONHandler, TOMLHandler, JoplinDbHandler
 
 try:
     import pyaml
@@ -148,7 +148,8 @@ class HandlerTest(unittest.TestCase):
         test_files = {
             'tests/hello-world.markdown': YAMLHandler, 
             'tests/hello-json.markdown': JSONHandler,
-            'tests/hello-toml.markdown': TOMLHandler
+            'tests/hello-toml.markdown': TOMLHandler,
+            'tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md': JoplinDbHandler
         }
 
         for fn, Handler in test_files.items():
