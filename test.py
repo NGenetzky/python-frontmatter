@@ -36,7 +36,7 @@ class FrontmatterTest(unittest.TestCase):
 
     def test_all_the_tests(self):
         "Sanity check that everything in the tests folder loads without errors"
-        for filename in glob.glob('tests/*'):
+        for filename in glob.glob('tests/*.*'):
             frontmatter.load(filename)
 
     def test_with_markdown_content(self):
