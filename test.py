@@ -241,13 +241,14 @@ class HandlerTest(unittest.TestCase):
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
-        posttext = frontmatter.dumps(post, JoplinDbHandler())
+        posttext = frontmatter.dump(post, '6fb7c13db1dc4a6a8f85275c02944029.md', handler=JoplinDbHandler())
+        posttext = frontmatter.dumps(post, handler=JoplinDbHandler())
         post_2 = frontmatter.loads(posttext)
 
-        post_data = post.to_dict()
-        post_2_data = post_2.to_dict()
-        for k in post_data:
-            self.assertEqual(post_data[k], post_2_data[k])
+        for k in post.metadata:
+            self.assertEqual(post.metadata[k], post_2.metadata[k])
+
+        self.assertEqual(post.content, post_2.content)
 
 
 
