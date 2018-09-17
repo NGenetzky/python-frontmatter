@@ -324,8 +324,20 @@ class JoplinDbHandler(object):
         kwargs.setdefault('Dumper', SafeDumper)
         kwargs.setdefault('default_flow_style', False)
 
-        metadata = yaml.dump(metadata, **kwargs).strip()
-        return u(metadata) # ensure unicode
+        unsorted_metadata = metadata.copy()
+
+        try:
+            id_ = unsorted_metadata.pop('id')
+            type_ = unsorted_metadata.pop('type_')
+        except KeyError:
+            raise ValueError('Metadata must contain "id" and "type_".'\
+                    '\nMetadata={0}'.format(unsorted_metadata))
+
+
+        unsorted = yaml.dump(unsorted_metadata, **kwargs).strip()
+
+        metadata_str = 'id: {0}\n{1}\ntype_: {2}'.format(id_, unsorted, type_)
+        return u(metadata_str) # ensure unicode
 
     def dumps(self, metadata, content, **kwargs):
         return self.POST_TEMPLATE.format( metadata=metadata,
