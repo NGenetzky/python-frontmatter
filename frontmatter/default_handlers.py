@@ -267,7 +267,11 @@ class JoplinDbHandler(object):
     TODO
     """
 
-    FM_BOUNDARY = None
+
+    # FM_BOUNDARY = re.compile(r'[\S\s]*^id: \w*[\S\s]*type_: \w*$', re.MULTILINE)
+    FM_BOUNDARY = re.compile(r'([\S\s]*)(^id: \w*[\S\s]*type_: \w)$', re.MULTILINE)
+    # FM_BOUNDARY = re.compile(r'^id: \w*$', re.MULTILINE)
+    # FM_BOUNDARY = re.compile(r'[\s\S]*id', re.MULTILINE)
     START_DELIMITER = None
     END_DELIMITER = None
 
@@ -296,17 +300,23 @@ class JoplinDbHandler(object):
         """
         Split text into frontmatter and content
         """
-        _, fm, content = self.FM_BOUNDARY.split(text, 2)
+        match = self.FM_BOUNDARY.match(text, 2)
+        content, fm = (match.group(1),match.group(2))
         return fm, content
 
-    def load(self, fm):
+    def load(self, fm, **kwargs):
         """
-        Parse frontmatter and return a dict
+        Parse YAML front matter. This uses yaml.SafeLoader by default. 
         """
-        raise NotImplementedError
+        kwargs.setdefault('Loader', SafeLoader)
+        return yaml.load(fm, **kwargs)
 
     def export(self, metadata, **kwargs):
         """
-        Turn metadata back into text
+        Export metadata as YAML. This uses yaml.SafeDumper by default.
         """
-        raise NotImplementedError
+        kwargs.setdefault('Dumper', SafeDumper)
+        kwargs.setdefault('default_flow_style', False)
+
+        metadata = yaml.dump(metadata, **kwargs).strip()
+        return u(metadata) # ensure unicode
