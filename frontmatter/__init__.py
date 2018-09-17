@@ -190,6 +190,8 @@ def dumps(post, handler=None, **kwargs):
 
     metadata = handler.export(post.metadata, **kwargs)
 
+    if hasattr(handler, 'dumps'):
+        return handler.dumps(metadata=metadata, content=post.content, **kwargs)
     return POST_TEMPLATE.format(
         metadata=metadata, content=post.content,
         start_delimiter=start_delimiter,

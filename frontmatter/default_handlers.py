@@ -275,6 +275,12 @@ class JoplinDbHandler(object):
     START_DELIMITER = None
     END_DELIMITER = None
 
+    POST_TEMPLATE = """\
+{content}
+
+{metadata}
+"""
+
     def __init__(self, fm_boundary=None, start_delimiter=None, end_delimiter=None):
         self.FM_BOUNDARY = fm_boundary or self.FM_BOUNDARY
         self.START_DELIMITER = start_delimiter or self.START_DELIMITER
@@ -320,3 +326,10 @@ class JoplinDbHandler(object):
 
         metadata = yaml.dump(metadata, **kwargs).strip()
         return u(metadata) # ensure unicode
+
+    def dumps(self, metadata, content, **kwargs):
+        return self.POST_TEMPLATE.format( metadata=metadata,
+                content=content).strip()
+
+
+
