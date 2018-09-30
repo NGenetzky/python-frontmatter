@@ -258,11 +258,11 @@ b_note
     def test_joplindb_note_external(self):
         content = self.data['content']
         metadata = self.data['metadata']
+        content_stripped = content.strip()
 
         post = frontmatter.load('tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md')
-        self.assertEqual(post.content, content)
 
-        self.assertEqual(post.content, content)
+        self.assertEqual(post.content, content_stripped)
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
@@ -298,7 +298,7 @@ b_note
 
         self.assertEqual(fm_load, self.data['metadata'])
 
-    @unittest.skip("joplindb metadata is reordered")
+    @unittest.skip("joplindb metadata can be reordered")
     def test_joplindb_note_split_export(self):
         handler = JoplinDbHandler()
 
