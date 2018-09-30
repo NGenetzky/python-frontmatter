@@ -211,47 +211,103 @@ class HandlerTest(unittest.TestCase):
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
-    def test_joplindb_note(self):
-        "load custom joplindb frontmatter"
-        post = frontmatter.load('tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md')
+class JoplindbHandlerTest(unittest.TestCase):
+    """
+    Tests for frontmatter.handlers.JoplinDbHandler
+    """
 
-        metadata = {
-            "id": "6fb7c13db1dc4a6a8f85275c02944029",
-            "parent_id": "f8fa8639975e42a8bb1c3caf06c4bff0",
-            "created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
-            "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
-            "is_conflict": 0,
-            "latitude": 0.00000000,
-            "longitude": 0.00000000,
-            "altitude": 0.0000,
-            "author": None,
-            "source_url": None,
-            "is_todo": 0,
-            "todo_due": 0,
-            "todo_completed": 0,
-            "source": "joplin-desktop",
-            "source_application": "net.cozic.joplin-desktop",
-            "application_data": None,
-            "order": 0,
-            "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
-            "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
-            "encryption_cipher_text": None,
-            "encryption_applied": 0,
-            "type_": 1,
+    def setUp(self):
+        self.data = {
+            'filename': 'tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md',
+            'content' : '''\
+b_note
+
+[requirements.txt](:/f04ff7ce26464ba59b4e4e55dd10d454)
+
+''',
+            'metadata': {
+                "id": "6fb7c13db1dc4a6a8f85275c02944029",
+                "parent_id": "f8fa8639975e42a8bb1c3caf06c4bff0",
+                "created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
+                "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
+                "is_conflict": 0,
+                "latitude": 0.00000000,
+                "longitude": 0.00000000,
+                "altitude": 0.0000,
+                "author": None,
+                "source_url": None,
+                "is_todo": 0,
+                "todo_due": 0,
+                "todo_completed": 0,
+                "source": "joplin-desktop",
+                "source_application": "net.cozic.joplin-desktop",
+                "application_data": None,
+                "order": 0,
+                "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
+                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
+                "encryption_cipher_text": None,
+                "encryption_applied": 0,
+                "type_": 1,
+            },
         }
+
+    def read_from_tests(self, name):
+        with open(self.data['filename']) as fil:
+            return fil.read()
+
+    def test_joplindb_note_external(self):
+        content = self.data['content']
+        metadata = self.data['metadata']
+
+        post = frontmatter.load('tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md')
+        self.assertEqual(post.content, content)
+
+        self.assertEqual(post.content, content)
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
-        posttext = frontmatter.dump(post, '6fb7c13db1dc4a6a8f85275c02944029.md', handler=JoplinDbHandler())
+        # dumps and then loads to ensure round trip conversions.
         posttext = frontmatter.dumps(post, handler=JoplinDbHandler())
         post_2 = frontmatter.loads(posttext)
 
         for k in post.metadata:
             self.assertEqual(post.metadata[k], post_2.metadata[k])
 
-        # TODO: What is up with this failing?
         self.assertEqual(post.content, post_2.content)
 
+    def test_joplindb_note_detect(self):
+        handler = JoplinDbHandler()
+        text = self.read_from_tests('note')
+
+        self.assertTrue(handler.detect(text))
+
+    def test_joplindb_note_split_content(self):
+        handler = JoplinDbHandler()
+        text = self.read_from_tests('note')
+
+        fm, content = handler.split(text)
+
+        self.assertEqual(content, self.data['content'])
+
+    def test_joplindb_note_split_load(self):
+        handler = JoplinDbHandler()
+
+        text = self.read_from_tests('note')
+        fm, content = handler.split(text)
+        fm_load = handler.load(fm)
+
+        self.assertEqual(fm_load, self.data['metadata'])
+
+    @unittest.skip("joplindb metadata is reordered")
+    def test_joplindb_note_split_export(self):
+        handler = JoplinDbHandler()
+
+        text = self.read_from_tests('note')
+        fm, content = handler.split(text)
+
+        fm_export = handler.export(self.data['metadata'])
+
+        self.assertEqual(fm_export, fm)
 
 
 
