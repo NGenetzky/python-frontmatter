@@ -283,6 +283,7 @@ class JoplinDbHandler(object):
 
     def __init__(self, fm_boundary=None, start_delimiter=None, end_delimiter=None):
         self.FM_BOUNDARY = fm_boundary or self.FM_BOUNDARY
+        # TODO: Throw not implemented if start or end is set.
         self.START_DELIMITER = start_delimiter or self.START_DELIMITER
         self.END_DELIMITER = end_delimiter or self.END_DELIMITER
 
@@ -306,8 +307,8 @@ class JoplinDbHandler(object):
         """
         Split text into frontmatter and content
         """
-        match = self.FM_BOUNDARY.match(text, 2)
-        content, fm = (match.group(1),match.group(2))
+        match = self.FM_BOUNDARY.match(text)
+        content, fm = match.group(1,2)
         return fm, content
 
     def load(self, fm, **kwargs):
