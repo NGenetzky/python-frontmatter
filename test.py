@@ -255,7 +255,7 @@ b_note
         with open(self.data['filename']) as fil:
             return fil.read()
 
-    def test_joplindb_note_external(self):
+    def test_joplindb_external(self):
         filename = self.data['filename']
         content = self.data['content']
         metadata = self.data['metadata']
@@ -276,13 +276,13 @@ b_note
 
         self.assertEqual(post.content, post_2.content)
 
-    def test_joplindb_note_detect(self):
+    def test_joplindb_detect(self):
         handler = JoplinDbHandler()
         text = self.read_from_tests()
 
         self.assertTrue(handler.detect(text))
 
-    def test_joplindb_note_split_content(self):
+    def test_joplindb_split_content(self):
         handler = JoplinDbHandler()
         text = self.read_from_tests()
 
@@ -290,7 +290,7 @@ b_note
 
         self.assertEqual(content, self.data['content'])
 
-    def test_joplindb_note_split_load(self):
+    def test_joplindb_split_load(self):
         handler = JoplinDbHandler()
 
         text = self.read_from_tests()
@@ -300,7 +300,7 @@ b_note
         self.assertEqual(fm_load, self.data['metadata'])
 
     @unittest.skip("joplindb metadata can be reordered")
-    def test_joplindb_note_split_export(self):
+    def test_joplindb_split_export(self):
         handler = JoplinDbHandler()
 
         text = self.read_from_tests()
