@@ -218,7 +218,6 @@ class JoplindbHandlerTest(unittest.TestCase):
 
     def setUp(self):
         self.data = {
-            'filename': 'tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md',
             'content' : '''\
 b_note
 
@@ -250,17 +249,19 @@ b_note
                 "type_": 1,
             },
         }
+        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
-    def read_from_tests(self, name):
+    def read_from_tests(self):
         with open(self.data['filename']) as fil:
             return fil.read()
 
     def test_joplindb_note_external(self):
+        filename = self.data['filename']
         content = self.data['content']
         metadata = self.data['metadata']
         content_stripped = content.strip()
 
-        post = frontmatter.load('tests/joplindb/6fb7c13db1dc4a6a8f85275c02944029.md')
+        post = frontmatter.load(filename)
 
         self.assertEqual(post.content, content_stripped)
         for k, v in metadata.items():
@@ -277,13 +278,13 @@ b_note
 
     def test_joplindb_note_detect(self):
         handler = JoplinDbHandler()
-        text = self.read_from_tests('note')
+        text = self.read_from_tests()
 
         self.assertTrue(handler.detect(text))
 
     def test_joplindb_note_split_content(self):
         handler = JoplinDbHandler()
-        text = self.read_from_tests('note')
+        text = self.read_from_tests()
 
         fm, content = handler.split(text)
 
@@ -292,7 +293,7 @@ b_note
     def test_joplindb_note_split_load(self):
         handler = JoplinDbHandler()
 
-        text = self.read_from_tests('note')
+        text = self.read_from_tests()
         fm, content = handler.split(text)
         fm_load = handler.load(fm)
 
@@ -302,7 +303,7 @@ b_note
     def test_joplindb_note_split_export(self):
         handler = JoplinDbHandler()
 
-        text = self.read_from_tests('note')
+        text = self.read_from_tests()
         fm, content = handler.split(text)
 
         fm_export = handler.export(self.data['metadata'])
