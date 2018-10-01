@@ -211,51 +211,29 @@ class HandlerTest(unittest.TestCase):
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
-class JoplindbHandlerTest(unittest.TestCase):
+class HandlerTest():
     """
-    Tests for frontmatter.handlers.JoplinDbHandler
+    Tests for frontmatter.handlers
     """
 
     def setUp(self):
+        """
+        This method should be overridden to initalize the TestCase
+        """
+        self.handler = None
         self.data = {
+            'filename': "tests/hello-world.markdown",
             'content' : '''\
-b_note
-
-[requirements.txt](:/f04ff7ce26464ba59b4e4e55dd10d454)
-
 ''',
             'metadata': {
-                "id": "6fb7c13db1dc4a6a8f85275c02944029",
-                "parent_id": "f8fa8639975e42a8bb1c3caf06c4bff0",
-                "created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
-                "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
-                "is_conflict": 0,
-                "latitude": 0.00000000,
-                "longitude": 0.00000000,
-                "altitude": 0.0000,
-                "author": None,
-                "source_url": None,
-                "is_todo": 0,
-                "todo_due": 0,
-                "todo_completed": 0,
-                "source": "joplin-desktop",
-                "source_application": "net.cozic.joplin-desktop",
-                "application_data": None,
-                "order": 0,
-                "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
-                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
-                "encryption_cipher_text": None,
-                "encryption_applied": 0,
-                "type_": 1,
             },
         }
-        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
     def read_from_tests(self):
         with open(self.data['filename']) as fil:
             return fil.read()
 
-    def test_joplindb_external(self):
+    def test_external(self):
         filename = self.data['filename']
         content = self.data['content']
         metadata = self.data['metadata']
@@ -268,7 +246,7 @@ b_note
             self.assertEqual(post[k], v)
 
         # dumps and then loads to ensure round trip conversions.
-        posttext = frontmatter.dumps(post, handler=JoplinDbHandler())
+        posttext = frontmatter.dumps(post, handler=self.handler)
         post_2 = frontmatter.loads(posttext)
 
         for k in post.metadata:
@@ -276,26 +254,22 @@ b_note
 
         self.assertEqual(post.content, post_2.content)
 
-    def test_joplindb_detect(self):
-        handler = JoplinDbHandler()
+    def test_detect(self):
         text = self.read_from_tests()
 
-        self.assertTrue(handler.detect(text))
+        self.assertTrue(self.handler.detect(text))
 
-    def test_joplindb_split_content(self):
-        handler = JoplinDbHandler()
+    def test_split_content(self):
         text = self.read_from_tests()
 
-        fm, content = handler.split(text)
+        fm, content = self.handler.split(text)
 
         self.assertEqual(content, self.data['content'])
 
-    def test_joplindb_split_load(self):
-        handler = JoplinDbHandler()
-
+    def test_split_load(self):
         text = self.read_from_tests()
-        fm, content = handler.split(text)
-        fm_load = handler.load(fm)
+        fm, content = self.handler.split(text)
+        fm_load = self.handler.load(fm)
 
         # The format of the failmsg makes it easy to copy into the test.
         any_fail = False
@@ -309,14 +283,12 @@ b_note
         if any_fail:
             self.fail(failmsg)
 
-    @unittest.skip("joplindb metadata can be reordered")
-    def test_joplindb_split_export(self):
-        handler = JoplinDbHandler()
-
+    @unittest.skip("metadata can be reordered")
+    def test_split_export(self):
         text = self.read_from_tests()
-        fm, content = handler.split(text)
+        fm, content = self.handler.split(text)
 
-        fm_export = handler.export(self.data['metadata'])
+        fm_export = self.handler.export(self.data['metadata'])
 
         self.assertEqual(fm_export, fm)
 
