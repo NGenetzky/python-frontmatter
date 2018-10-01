@@ -292,8 +292,9 @@ class HandlerTest():
 
         self.assertEqual(fm_export, fm)
 
-class JoplindbNoteHandlerTest(JoplindbHandlerTest):
+class JoplindbNoteHandlerTest(HandlerTest, unittest.TestCase):
     def setUp(self):
+        self.handler = JoplinDbHandler()
         self.data = {
             'content' : '''\
 b_note
@@ -328,8 +329,9 @@ b_note
         }
         self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
-class JoplindbTagHandlerTest(JoplindbHandlerTest):
+class JoplindbTagHandlerTest(HandlerTest, unittest.TestCase):
     def setUp(self):
+        self.handler = JoplinDbHandler()
         self.data = {
             'content' : '''\
 c_tag
@@ -350,8 +352,9 @@ c_tag
         }
         self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
-class JoplindbResourceHandlerTest(JoplindbHandlerTest):
+class JoplindbResourceHandlerTest(HandlerTest, unittest.TestCase):
     def setUp(self):
+        self.handler = JoplinDbHandler()
         self.data = {
             'content' : '''\
 requirements.txt
@@ -375,8 +378,9 @@ requirements.txt
         }
         self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
-class JoplindbNotebookHandlerTest(JoplindbHandlerTest):
+class JoplindbNotebookHandlerTest(HandlerTest, unittest.TestCase):
     def setUp(self):
+        self.handler = JoplinDbHandler()
         self.data = {
             'content' : '''\
 a_notebook
@@ -397,8 +401,9 @@ a_notebook
         }
         self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
-class JoplindbNoteTagHandlerTest(JoplindbHandlerTest):
+class JoplindbNoteTagHandlerTest(HandlerTest, unittest.TestCase):
     def setUp(self):
+        self.handler = JoplinDbHandler()
         self.data = {
             'content' : '',
             'metadata': {
