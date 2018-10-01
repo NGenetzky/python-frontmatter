@@ -211,7 +211,7 @@ class HandlerTest(unittest.TestCase):
         for k, v in metadata.items():
             self.assertEqual(post[k], v)
 
-class HandlerTest():
+class HandlerBaseTest():
     """
     Tests for frontmatter.handlers
     """
