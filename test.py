@@ -297,7 +297,17 @@ b_note
         fm, content = handler.split(text)
         fm_load = handler.load(fm)
 
-        self.assertEqual(fm_load, self.data['metadata'])
+        # The format of the failmsg makes it easy to copy into the test.
+        any_fail = False
+        failmsg = 'The following metadata did not match the test:'
+        for k in self.data['metadata']:
+            if(fm_load[k] == self.data['metadata'][k]):
+                continue
+            any_fail = True
+            failmsg += '\n"{0}": {1},'.format(k, repr(fm_load[k]))
+
+        if any_fail:
+            self.fail(failmsg)
 
     @unittest.skip("joplindb metadata can be reordered")
     def test_joplindb_split_export(self):
