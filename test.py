@@ -7,6 +7,7 @@ import doctest
 import glob
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -34,6 +35,7 @@ class FrontmatterTest(unittest.TestCase):
     """
     maxDiff = None
 
+    @unittest.skip("Doesn't allow tests of custom Handlers")
     def test_all_the_tests(self):
         "Sanity check that everything in the tests folder loads without errors"
         for filename in glob.glob('tests/*'):
@@ -311,6 +313,39 @@ Just need three dashes
 ---
 
 And this shouldn't break.''',
+            'metadata': {
+                "test": "tester",
+                "author": "bob",
+                "something": "else",
+            },
+        }
+
+class YAMLPandocHandlerTest(HandlerBaseTest, unittest.TestCase):
+    def setUp(self):
+        yaml_pandoc_re = re.compile(r'^(?:---)|(?:\.\.\.)$', re.MULTILINE)
+        self.handler = YAMLHandler(
+                fm_boundary=yaml_pandoc_re,
+                start_delimiter='---', end_delimiter='...',
+                )
+        self.data = {
+            'filename': 'tests/hello-yaml-pandoc.markdown',
+            # TODO: YAMLHandler.split() is prepending '\n' to the content
+            'content' : '''\
+
+
+Title
+=====
+
+title2
+------
+
+Hello.
+
+Just need three dashes
+---
+
+And this shouldn't break.
+''',
             'metadata': {
                 "test": "tester",
                 "author": "bob",
