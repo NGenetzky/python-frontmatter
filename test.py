@@ -320,6 +320,131 @@ b_note
 
         self.assertEqual(fm_export, fm)
 
+class JoplindbNoteHandlerTest(JoplindbHandlerTest):
+    def setUp(self):
+        self.data = {
+            'content' : '''\
+b_note
+
+[requirements.txt](:/f04ff7ce26464ba59b4e4e55dd10d454)
+
+''',
+            'metadata': {
+                "id": "6fb7c13db1dc4a6a8f85275c02944029",
+                "parent_id": "f8fa8639975e42a8bb1c3caf06c4bff0",
+                "created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
+                "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
+                "is_conflict": 0,
+                "latitude": 0.00000000,
+                "longitude": 0.00000000,
+                "altitude": 0.0000,
+                "author": None,
+                "source_url": None,
+                "is_todo": 0,
+                "todo_due": 0,
+                "todo_completed": 0,
+                "source": "joplin-desktop",
+                "source_application": "net.cozic.joplin-desktop",
+                "application_data": None,
+                "order": 0,
+                "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 33, 719000),
+                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 12, 394000),
+                "encryption_cipher_text": None,
+                "encryption_applied": 0,
+                "type_": 1,
+            },
+        }
+        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
+
+class JoplindbTagHandlerTest(JoplindbHandlerTest):
+    def setUp(self):
+        self.data = {
+            'content' : '''\
+c_tag
+
+''',
+            'metadata': {
+                "id": "2847b21f3e184bc2b5f29c61b7036045",
+                #
+                "created_time": datetime.datetime(2018, 9, 17, 3, 11, 59, 17000),
+                "encryption_applied": 0,
+                "encryption_cipher_text": None,
+                "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 26, 332000),
+                "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 59, 17000),
+                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 26, 332000),
+                #
+                "type_": 5,
+            },
+        }
+        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
+
+class JoplindbResourceHandlerTest(JoplindbHandlerTest):
+    def setUp(self):
+        self.data = {
+            'content' : '''\
+requirements.txt
+
+''',
+            'metadata': {
+                "id": "f04ff7ce26464ba59b4e4e55dd10d454",
+                #
+                "mime": "text/plain",
+                "filename": None,
+                "file_extension": "txt",
+                "created_time": datetime.datetime(2018, 9, 17, 3, 14, 3, 557000),
+                "encryption_applied": 0,
+                "encryption_cipher_text": None,
+                "updated_time": datetime.datetime(2018, 9, 17, 3, 14, 3, 557000),
+                "user_created_time": datetime.datetime(2018, 9, 17, 3, 14, 3, 557000),
+                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 14, 3, 557000),
+                #
+                "type_": 4,
+            },
+        }
+        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
+
+class JoplindbNotebookHandlerTest(JoplindbHandlerTest):
+    def setUp(self):
+        self.data = {
+            'content' : '''\
+a_notebook
+
+''',
+            'metadata': {
+                "id": "f8fa8639975e42a8bb1c3caf06c4bff0",
+                #
+                "created_time": datetime.datetime(2018, 9, 17, 3, 11, 28, 764000),
+                "encryption_applied": 0,
+                "encryption_cipher_text": None,
+                "updated_time": datetime.datetime(2018, 9, 17, 3, 11, 28, 764000),
+                "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 28, 764000),
+                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 11, 28, 764000),
+                #
+                "type_": 2,
+            },
+        }
+        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
+
+class JoplindbNoteTagHandlerTest(JoplindbHandlerTest):
+    def setUp(self):
+        self.data = {
+            'content' : '',
+            'metadata': {
+                "id": "eafaf347ef12429ca3a1a690f6020c07",
+                #
+                "created_time": datetime.datetime(2018, 9, 17, 3, 11, 59, 47000),
+                "encryption_applied": 0,
+                "encryption_cipher_text": None,
+                "note_id": '6fb7c13db1dc4a6a8f85275c02944029',
+                "tag_id": '2847b21f3e184bc2b5f29c61b7036045',
+                "updated_time": datetime.datetime(2018, 9, 17, 3, 11, 59, 47000),
+                "user_created_time": datetime.datetime(2018, 9, 17, 3, 11, 59, 47000),
+                "user_updated_time": datetime.datetime(2018, 9, 17, 3, 11, 59, 47000),
+                #
+                "type_": 6,
+            },
+        }
+        self.data['filename'] = 'tests/joplindb/{id}.md'.format(id=self.data['metadata']['id'])
 
 
 if __name__ == "__main__":
