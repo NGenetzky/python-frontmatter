@@ -235,6 +235,8 @@ class HandlerBaseTest():
         filename = self.data['filename']
         content = self.data['content']
         metadata = self.data['metadata']
+
+        # TODO: fronmatter.load() is stripping whitespace!
         content_stripped = content.strip()
 
         post = frontmatter.load(filename)
@@ -346,6 +348,35 @@ And this might break.
                 "something": "else",
             },
         }
+
+    @staticmethod
+    def debug_message(name, msg):
+        print("\n{line} {n}\n{m}\n{line}\n".format(line='-'*80,n=name,m=msg))
+
+    def test_external(self):
+        filename = self.data['filename']
+        content = self.data['content']
+        metadata = self.data['metadata']
+
+        # TODO: fronmatter.load() is stripping whitespace!
+        content_stripped = content.strip()
+
+        post = frontmatter.load(filename)
+
+        self.assertEqual(post.content, content_stripped)
+        for k, v in metadata.items():
+            self.assertEqual(post[k], v)
+
+        self.debug_message('post', post)
+        # dumps and then loads to ensure round trip conversions.
+        posttext = frontmatter.dumps(post, handler=self.handler)
+        self.debug_message('posttext', posttext)
+        post_2 = frontmatter.loads(posttext)
+
+        for k in post.metadata:
+            self.assertEqual(post.metadata[k], post_2.metadata[k])
+
+        self.assertEqual(post.content, post_2.content)
 
 class TOMLHandlerTest(HandlerBaseTest, unittest.TestCase):
     def setUp(self):
